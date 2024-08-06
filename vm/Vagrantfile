@@ -1,0 +1,15 @@
+# - * - mode: ruby - * -
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "generic/ubuntu2204"
+    
+    # naming the vagrant vm
+    config.vm.define "radobaan" do |vm|
+    end 
+    
+    config.vm.provider :libvirt do |libvirt|
+      libvirt.default_prefix = ""
+      libvirt.memory = 2048
+    end
+end

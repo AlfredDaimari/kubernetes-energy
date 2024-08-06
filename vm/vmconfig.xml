@@ -1,0 +1,21 @@
+<domain>
+<memoryBacking>
+  <source type='memfd'/>
+  <access mode='shared'/>
+</memoryBacking>
+</domain>
+
+<devices>
+<filesystem type='mount' accessmode='passthrough'>
+    <driver type='virtiofs'/>
+    <source dir='/var/lib/libvirt/scaphandre/DOMAIN_NAME'/>
+    <target dir='DOMAIN_NAME-scaph'/>
+    <readonly />
+</filesystem>
+<filesystem type='mount' accessmode='passthrough'>
+    <driver type='virtiofs'/>
+    <source dir='/home/alfred/projects/energy_6ec/json'/>
+    <target dir='DOMAIN_NAME-json'/>
+    <readonly />
+</filesystem>
+</devices>
