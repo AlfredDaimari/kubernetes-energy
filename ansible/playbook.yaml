@@ -158,6 +158,7 @@
 - name: Create scaphandre service
   hosts: servers
   tags: setup_scaph
+# instead of vars use a script to run ansible and setup the algorithms
   vars:
     scheduler: 'kube-default'
     algo: 'algo-default'
@@ -210,3 +211,79 @@
         enabled: no
         state: stopped
 
+
+# setup kubernetes descheduler
+- name: Setup descheduler
+  hosts: kube_controller
+  tags: setup_descheduler
+
+  tasks:
+    - name: Clone descheduler
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.git:
+        repo: https://github.com/kubernetes-sigs/descheduler.git
+        dest: /home/cloud_controller_adaim/descheduler
+
+# run kubernetes descheduler
+- name: Run descheduler
+  hosts: kube_controller
+  tags: run_descheduler
+
+  tasks:
+    - name: Run descheduler
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.shell: kubectl create -f kubernetes/base/rbac.yaml
+      args:
+        chdir: /home/cloud_controller_adaim/descheduler
+
+  tasks:
+    - name: Run descheduler
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.shell: kubectl create -f kubernetes/base/configmap.yaml
+      args:
+        chdir: /home/cloud_controller_adaim/descheduler
+
+  tasks:
+    - name: Run descheduler
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.shell: kubectl create -f kubernetes/deployment/deployment.yaml
+      args:
+        chdir: /home/cloud_controller_adaim/descheduler
+
+
+# setup deathstar benchmark
+- name: Setup deathstar benchmark
+  hosts: kube_controller
+  tags: setup_deathstar
+
+  tasks:
+    - name: Setup deathstar
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.git:
+        repo: https://github.com/delimitrou/DeathStarBench.git
+        dest: /home/cloud_controller_adaim/deathstar
+
+
+# Setup hotel reservation deathstar benchmark (use a scheduler type)
+# Run hotel reservation deathstar benchmark
+# Remove hotel reservation deathstar benchmark
+
+
+# Setup social network deathstar benchmark (use a scheduler type)
+# Run social network deathstar benchmark
+# Remove social network deathstar benchmark
+
+
+# Setup Media service deathstar benchmark (use a scheduler type)
+# Run media service deathstar benchmark
+# Remove media service deathstar benchmark
