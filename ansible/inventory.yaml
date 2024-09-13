@@ -12,8 +12,11 @@ servers:
       ansible_host: 192.168.138.3
       ansible_ssh_private_key_file: /homt/adaim/.ssh/id_rsa_continuum
 
-  kube_controller:
-    ansible_port: 22
-    ansible_user: cloud_controller_adaim
-    ansible_host: 192.168.138.2
-    ansible_ssh_private_key_file: /home/adaim/.ssh/id_rsa_continuum
+kube_controller:
+  hosts:
+    cloud_controller_adaim:
+      ansible_port: 22
+      ansible_user: cloud_controller_adaim
+      ansible_host: 192.168.138.2
+      ansible_ssh_private_key_file: /home/adaim/.ssh/id_rsa_continuum
+

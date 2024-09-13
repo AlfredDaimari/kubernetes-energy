@@ -1,0 +1,52 @@
+# File to setup schedulers
+
+# clone kubernetes descheduler
+- name: Setup descheduler
+  hosts: kube_controller
+  tags: setup_descheduler
+
+  tasks:
+    - name: Clone descheduler
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.git:
+        repo: https://github.com/kubernetes-sigs/descheduler.git
+        dest: /home/cloud_controller_adaim/descheduler
+
+# setup kubernetes descheduler
+- name: Run descheduler
+  hosts: kube_controller
+  tags: run_descheduler
+
+  tasks:
+    - name: Run descheduler rbac
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.shell: kubectl create -f kubernetes/base/rbac.yaml
+      args:
+        chdir: /home/cloud_controller_adaim/descheduler
+
+  tasks:
+    - name: Run descheduler configmap
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.shell: kubectl create -f kubernetes/base/configmap.yaml
+      args:
+        chdir: /home/cloud_controller_adaim/descheduler
+
+  tasks:
+    - name: Run descheduler container
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.shell: kubectl create -f kubernetes/deployment/deployment.yaml
+      args:
+        chdir: /home/cloud_controller_adaim/descheduler
+
+
+# setup poseidon scheduler
+
+

@@ -1,0 +1,48 @@
+# setup deathstar benchmark
+- name: Setup deathstar benchmark
+  hosts: kube_controller
+  tags: setup_deathstar
+
+  tasks:
+    - name: Setup deathstar
+      ansible.builtin.git:
+        repo: https://github.com/AlfredDaimari/DeathStarBench.git         
+        dest: /home/vagrant/deathstar
+
+    - name: Add as safe directory
+      ansible.builtin.command: git config --global --add safe.directory /home/vagrant/deathstar
+
+# switch branch
+- name: Switch deathstar branch
+  hosts: kube_controller
+  tags: switch_branch
+  
+  tasks:
+    - name: switch deathstar branch
+      ansible.builtin.git:
+        repo: https://github.com/AlfredDaimari/DeathStarBench.git       
+        dest: /home/vagrant/deathstar
+        version: "{{ branch_name }}" 
+        force: yes
+
+# Setup hotel reservation deathstar benchmark
+- name: Setup hotel reservation deathstar benchmark
+  hosts: kube_controller
+  tags: setup_hotel_reservation
+  tasks:
+    - name: Setup hotel reservation
+      ansible.builtin.command: "kubectl apply -Rf /home/{{inventory_hostname}}/deathstar/hotelReservation/kubernetes/"
+
+# Remove hotel reservation deathstar benchmark
+- name: Remove hotel reservation deathstar benchmark
+  hosts: kube_controller
+  tags: remove_hotel_reservation
+  tasks:
+    - name: remove hotel reservation
+      ansible.builtin.command: "kubectl delete -Rf /home/{{inventory_hostname}}/deathstar/hotelReservation/kubernetes/"
+
+# Setup social network deathstar benchmark 
+# Remove social network deathstar benchmark
+
+# Setup Media service deathstar benchmark 
+# Remove media service deathstar benchmark
