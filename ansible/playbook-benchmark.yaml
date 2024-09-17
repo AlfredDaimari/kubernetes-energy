@@ -7,7 +7,7 @@
     - name: Setup deathstar
       ansible.builtin.git:
         repo: https://github.com/AlfredDaimari/DeathStarBench.git         
-        dest: /home/vagrant/deathstar
+        dest: "/home/{{inventory_hostname}}/deathstar"
 
     - name: Add as safe directory
       ansible.builtin.command: git config --global --add safe.directory /home/vagrant/deathstar
@@ -21,7 +21,7 @@
     - name: switch deathstar branch
       ansible.builtin.git:
         repo: https://github.com/AlfredDaimari/DeathStarBench.git       
-        dest: /home/vagrant/deathstar
+        dest: "/home/{{inventory_hostname}}/deathstar"
         version: "{{ branch_name }}" 
         force: yes
 
