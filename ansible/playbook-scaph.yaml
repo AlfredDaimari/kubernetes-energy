@@ -68,7 +68,7 @@
     ansible.builtin.shell: /tmp/sh.rustup.rs -y
 
   - name: Build scaph
-    ansible.builtin.command: /home/vagrant/.cargo/bin/cargo build --features qemu
+    ansible.builtin.command: "/home/{{inventory_hostname}}/.cargo/bin/cargo build --features qemu"
     args:
       chdir: "/home/{{inventory_hostname}}/scaphandre"
 
