@@ -77,7 +77,7 @@
   hosts: servers
   tags: setup_virtio
     
-    #  tasks:
+    tasks:
     #- name: Install 9p virtio driver
     #become: yes
     #become_user: root
