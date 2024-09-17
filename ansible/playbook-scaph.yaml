@@ -76,53 +76,50 @@
 - name: Setup 9p and virtiofs 
   hosts: servers
   tags: setup_virtio
-  vars:
-    scheduler: 'kube-default'
-    algo: 'algo-default'
-  
-  tasks:
-  - name: Install 9p virtio driver
-    become: yes
-    become_user: root
-    become_method: sudo
-    ansible.builtin.apt:
-      name: qemu-guest-agent
-      state: latest
+    
+    #  tasks:
+    #- name: Install 9p virtio driver
+    #become: yes
+    #become_user: root
+    #become_method: sudo
+    #ansible.builtin.apt:
+    #  name: qemu-guest-agent
+    #  state: latest
 
-  - name: Add 9p to initramfs
-    become: yes
-    become_user: root
-    become_method: sudo
-    ansible.builtin.copy:
-      src: /srv/remote/initramfs-modules
-      dest: /etc/initramfs-tools/modules
-      owner: root
-      group: root
-      mode: u=rw,g=r,o=r
+    #- name: Add 9p to initramfs
+    #become: yes
+    #become_user: root
+    #become_method: sudo
+    #ansible.builtin.copy:
+    #  src: /srv/remote/initramfs-modules
+    #  dest: /etc/initramfs-tools/modules
+    #  owner: root
+    #  group: root
+    #  mode: u=rw,g=r,o=r
 
-  - name: Update the initramfs
-    become: yes
-    become_user: root
-    become_method: sudo
-    ansible.builtin.command: update-initramfs -u
+    #- name: Update the initramfs
+    #become: yes
+    #become_user: root
+    #become_method: sudo
+    #ansible.builtin.command: update-initramfs -u
   
-  - name: Add 9p to loaded kernel modules
-    become: yes
-    become_user: root
-    become_method: sudo
-    ansible.builtin.copy:
-      src: /srv/remote/kernel-modules
-      dest: /etc/modules
-      owner: root
-      group: root
-      mode: u=rw,g=r,o=r
+    #- name: Add 9p to loaded kernel modules
+    #become: yes
+    #become_user: root
+    #become_method: sudo
+    #ansible.builtin.copy:
+    #  src: /srv/remote/kernel-modules
+    #  dest: /etc/modules
+    #  owner: root
+    #  group: root
+    #  mode: u=rw,g=r,o=r
   
-  - name: Reebot the machine
-    become: yes
-    become_user: root
-    become_method: sudo
-    reboot:
-      reboot_timeout: 600
+    #- name: Reebot the machine
+    #become: yes
+    #become_user: root
+    #become_method: sudo
+    #reboot:
+    #  reboot_timeout: 600
 
   - name: Make scaphandre mount directory
     become: yes
