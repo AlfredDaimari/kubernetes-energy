@@ -158,11 +158,12 @@
 
   # add max top consumers to limit the json file
   tasks:
+    
     - name: Create the json write file
-    become: yes
-    become_user: root
-    become_method: sudo
-    ansible.builtin.command: 'touch /var/json/{{inventory_hostname}}-{{scheduler}}-{{algo}}-{{req_per_sec}}reqs-{{dur}}dur-report.json'
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.command: 'touch /var/json/{{inventory_hostname}}-{{scheduler}}-{{algo}}-{{req_per_sec}}reqs-{{dur}}dur-report.json'
 
     - name: Create scaphandre service for json logs every 5 seconds
       become: yes
