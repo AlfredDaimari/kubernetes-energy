@@ -55,7 +55,7 @@
   - name: Clone scaphandre
     ansible.builtin.git:
       repo: https://github.com/hubblo-org/scaphandre.git
-      dest: /home/vagrant/scaphandre
+      dest: "/home/{{inventory_hostname}}/scaphandre"
 
   - name: Download cargo installer
     get_url:
@@ -70,7 +70,7 @@
   - name: Build scaph
     ansible.builtin.command: /home/vagrant/.cargo/bin/cargo build --features qemu
     args:
-      chdir: /home/vagrant/scaphandre
+      chdir: "/home/{{inventory_hostname}}/scaphandre"
 
 # install the requirments needed to setup a virtual file system
 - name: Setup 9p and virtiofs 
