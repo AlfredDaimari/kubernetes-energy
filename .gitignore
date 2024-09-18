@@ -1,1 +1,3 @@
 vm/.vagrant/*
+ansible/inventorytest.yaml
+scripts/xml
