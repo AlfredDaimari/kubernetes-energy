@@ -73,7 +73,7 @@
       chdir: "/home/{{inventory_hostname}}/scaphandre"
 
 # install the requirments needed to setup a virtual file system
-- name: Setup 9p and virtiofs 
+- name: Setup virtiofs 
   hosts: servers
   tags: setup_virtio
     
@@ -139,11 +139,11 @@
     become_method: sudo
     ansible.builtin.command: 'mount -t virtiofs {{inventory_hostname}}-scaph /var/scaphandre'
 
-  - name: Mount the json output directory
-    become: yes
-    become_user: root
-    become_method: sudo
-    ansible.builtin.command: 'mount -t virtiofs {{inventory_hostname}}-json /var/json'
+    #  - name: Mount the json output directory
+    #become: yes
+    #become_user: root
+    #become_method: sudo
+    #ansible.builtin.command: 'mount -t virtiofs {{inventory_hostname}}-json /var/json'
 
 # setup scaphandre as a service
 - name: Create scaphandre service
