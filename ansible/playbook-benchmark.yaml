@@ -21,7 +21,13 @@
       become: yes
       become_user: root
       become_method: sudo
-      ansible.builtin.command: snap install docker 
+      ansible.builtin.command: snap install docker
+
+    - name: setup a docker image repository
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.command: docker run -d -p 5000:5000 --name registry registry:2.7
 
 # build images in each node
 - name: Build image on each node
@@ -46,7 +52,13 @@
       become: yes
       become_user: root
       become_method: sudo
-      ansible.builtin.shell: docker image prune --all -f 
+      ansible.builtin.shell: docker image prune --all -f
+
+    - name: remove local docker repository
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.shell:
 
 # switch branch
 - name: Switch deathstar branch
