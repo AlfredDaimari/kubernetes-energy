@@ -22,7 +22,7 @@
       become_user: root
       become_method: sudo
       ansible.builtin.apt:
-        name: docker.io
+        name: docker
         state: latest
 
 # build images in each node
