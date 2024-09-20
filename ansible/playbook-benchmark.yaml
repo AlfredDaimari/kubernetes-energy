@@ -12,6 +12,16 @@
     - name: Add as safe directory
       ansible.builtin.command: git config --global --add safe.directory /home/vagrant/deathstar
 
+- name: Setup docker.io
+  hosts: servers
+  tags: setup_docker
+  
+  tasks:
+    - name: setup docker
+      ansible.builtin.apt:
+        name: docker.io
+        state: latest
+
 # build images in each node
 - name: Build image on each node
   hosts: servers
