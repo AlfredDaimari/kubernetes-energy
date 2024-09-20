@@ -30,6 +30,9 @@
 
   tasks:
     - name: build hotel reservation images on local node
+      become: yes
+      become_user: root
+      become_method: sudo
       ansible.builtin.shell: sh kubernetes/scripts/build-docker-images.sh
       args:
         chdir: "/home/{{inventory_hostname}}/deathstar/hotelReservation"
@@ -40,6 +43,9 @@
 
   tasks:
     - name: delete images on local node
+      become: yes
+      become_user: root
+      become_method: sudo
       ansible.builtin.shell: docker image prune --all -f 
 
 # switch branch
@@ -61,6 +67,9 @@
   tags: setup_hotel_reservation
   tasks:
     - name: Setup hotel reservation
+      become: yes
+      become_user: root
+      become_method: sudo
       ansible.builtin.command: "kubectl apply -Rf /home/{{inventory_hostname}}/deathstar/hotelReservation/kubernetes/"
 
 # Remove hotel reservation deathstar benchmark
