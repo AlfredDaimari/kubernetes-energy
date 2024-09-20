@@ -1,6 +1,6 @@
 # setup deathstar benchmark
 - name: Setup deathstar benchmark
-  hosts: kube_controller
+  hosts: servers
   tags: setup_deathstar
 
   tasks:
@@ -11,6 +11,25 @@
 
     - name: Add as safe directory
       ansible.builtin.command: git config --global --add safe.directory /home/vagrant/deathstar
+
+# build images in each node
+- name: Build image on each node
+  hosts: servers
+  tags: build_image
+
+  tasks:
+    - name: build hotel reservation images on local node
+      ansible.builtin.shell: sh kubernetes/scripts/build-docker-images.sh
+      args:
+        chdir: "/home/{{inventory_hostname}}/deathstar/hotelReservation"
+
+- name: Delete images on each node
+  hosts: servers
+  tags: delete_image
+
+  tasks:
+    - name: delete images on local node
+      ansible.builtin.shell: docker image prune --all -f 
 
 # switch branch
 - name: Switch deathstar branch
@@ -41,8 +60,3 @@
     - name: remove hotel reservation
       ansible.builtin.command: "kubectl delete -Rf /home/{{inventory_hostname}}/deathstar/hotelReservation/kubernetes/"
 
-# Setup social network deathstar benchmark 
-# Remove social network deathstar benchmark
-
-# Setup Media service deathstar benchmark 
-# Remove media service deathstar benchmark
