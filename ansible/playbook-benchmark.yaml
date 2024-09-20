@@ -18,6 +18,9 @@
   
   tasks:
     - name: setup docker
+      become: yes
+      become_user: root
+      become_method: sudo
       ansible.builtin.apt:
         name: docker.io
         state: latest
