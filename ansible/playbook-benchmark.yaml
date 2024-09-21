@@ -58,7 +58,7 @@
       become: yes
       become_user: root
       become_method: sudo
-      ansible.builtin.shell: docker stopp registry
+      ansible.builtin.shell: docker stop registry
 
 # switch branch
 - name: Switch deathstar branch
