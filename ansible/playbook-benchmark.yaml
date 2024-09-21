@@ -54,11 +54,17 @@
       become_method: sudo
       ansible.builtin.shell: docker image prune --all -f
 
-    - name: remove local docker repository
+    - name: stop local docker repository
       become: yes
       become_user: root
       become_method: sudo
       ansible.builtin.shell: docker stop registry
+
+    - name: remove local docker repository
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.shell: docker rm repository
 
 # switch branch
 - name: Switch deathstar branch
