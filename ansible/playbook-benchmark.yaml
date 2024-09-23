@@ -98,3 +98,37 @@
     - name: remove hotel reservation
       ansible.builtin.command: "kubectl delete -Rf /home/{{inventory_hostname}}/deathstar/hotelReservation/kubernetes/"
 
+
+# Setup mediaMicroservices deathstar benchmark
+- name: Setup media microservices deathstar benchmark
+  hosts: kube_controller
+  tags: setup_media_microservices
+  tasks:
+    - name: Setup media microservices
+      ansible.builtin.command: "kubectl apply -Rf /home/{{inventory_hostname}}/deathstar/mediaMicroservices/kubernetes/"
+
+
+# Remove mediaMicroservices deathstar benchmark
+- name: Remove media microservices deathstar benchmark
+  hosts: kube_controller
+  tags: remove_media_microservices
+  tasks:
+    - name: remove media microservices
+      ansible.builtin.command: "kubectl delete -Rf /home/{{inventory_hostname}}/deathstar/mediaMicroservices/kubernetes/"
+
+# Setup socialNetwork deathstar benchmark
+- name: Setup social network deathstar benchmark
+  hosts: kube_controller
+  tags: setup_social_network
+  tasks:
+    - name: setup social network
+      ansible.builtin.command: "kubectl apply -Rf /home/{{inventory_hostname}}/deathstar/socialNetwork/kubernetes/"
+
+
+# Remove socialNetwork deathstar benchmark
+- name: Remove social network deathstar benchmark
+  hosts: kube_controller
+  tags: remove_social_network
+  tasks:
+    - name: remove social network
+      ansible.builtin.command: "kubectl apply -Rf /home/{{inventory_hostname}}/deathstar/socialNetwork/kubernetes/"
