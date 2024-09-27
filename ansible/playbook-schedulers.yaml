@@ -12,7 +12,7 @@
       become_method: sudo
       ansible.builtin.git:
         repo: https://github.com/kubernetes-sigs/descheduler.git
-        dest: /home/cloud_controller_adaim/descheduler
+        dest: "/home/{{inventory_hostname}}/descheduler"
 
 # setup kubernetes descheduler
 - name: Run descheduler
@@ -26,7 +26,7 @@
       become_method: sudo
       ansible.builtin.shell: kubectl create -f kubernetes/base/rbac.yaml
       args:
-        chdir: /home/cloud_controller_adaim/descheduler
+        chdir: "/home/{{inventory_hostname}}/descheduler"
 
   tasks:
     - name: Run descheduler configmap
@@ -35,7 +35,7 @@
       become_method: sudo
       ansible.builtin.shell: kubectl create -f kubernetes/base/configmap.yaml
       args:
-        chdir: /home/cloud_controller_adaim/descheduler
+        chdir: "/home/{{inventory_hostname}}/descheduler"
 
   tasks:
     - name: Run descheduler container
@@ -44,7 +44,7 @@
       become_method: sudo
       ansible.builtin.shell: kubectl create -f kubernetes/deployment/deployment.yaml
       args:
-        chdir: /home/cloud_controller_adaim/descheduler
+        chdir: "/home/{{inventory_hostname}}/descheduler"
 
 
 # setup poseidon scheduler
