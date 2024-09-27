@@ -37,7 +37,7 @@
       args:
         chdir: "/home/{{inventory_hostname}}/descheduler"
 
-    - name: Run descheduler container
+    - name: Run descheduler deployment
       become: yes
       become_user: root
       become_method: sudo
@@ -45,6 +45,35 @@
       args:
         chdir: "/home/{{inventory_hostname}}/descheduler"
 
+
+- name: Remove descheduler
+  hosts: kube_controller
+  tags: remove_descheduler
+
+  tasks:
+    - name: Remove descheduler rbac
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.shell: kubectl delete -f kubernetes/base/rbac.yaml
+      args:
+        chdir: "/home/{{inventory_hostname}}/descheduler"
+    
+    - name: Remove descheduler configmap
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.shell: kubectl delete -f kubernetes/base/configmap.yaml
+      args:
+        chdir: "/home/{{inventory_hostname}}/descheduler"
+
+    - name: Remove descheduler deployment
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.shell: kubectl delete -f kubernetes/deployment/deployment.yaml
+      args:
+        chdir: "/home/{{inventory_hostname}}/descheduler"
 
 # setup poseidon scheduler
 
