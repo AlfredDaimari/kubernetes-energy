@@ -14,6 +14,9 @@
         repo: https://github.com/kubernetes-sigs/descheduler.git
         dest: "/home/{{inventory_hostname}}/descheduler"
 
+    - name: Add as safe directory
+      ansible.builtin.command: "git config --global --add safe.directory /home/{{inventory_hostname}}/descheduler"
+
 # setup kubernetes descheduler
 - name: Run descheduler
   hosts: kube_controller
