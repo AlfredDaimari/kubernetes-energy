@@ -131,4 +131,4 @@
   tags: remove_social_network
   tasks:
     - name: remove social network
-      ansible.builtin.command: "kubectl apply -Rf /home/{{inventory_hostname}}/deathstar/socialNetwork/kubernetes/"
+      ansible.builtin.command: "kubectl delete -Rf /home/{{inventory_hostname}}/deathstar/socialNetwork/kubernetes/"
