@@ -177,7 +177,7 @@
           After=network.target
 
           [Service]
-          ExecStart=/home/vagrant/scaphandre/target/debug/scaphandre --vm json -s 5 -f /var/json/{{inventory_hostname}}-{{scheduler}}-{{algo}}-{{req_per_sec}}reqs-{{dur}}dur-report.json --resources
+          ExecStart=/home/{{inventory_hostname}}/scaphandre/target/debug/scaphandre --vm json -s 5 -f --max-top-consumers 20 /var/json/{{inventory_hostname}}-{{scheduler}}-{{algo}}-{{req_per_sec}}reqs-{{dur}}dur-report.json --resources
           Restart=on-failure
 
           [Install]
