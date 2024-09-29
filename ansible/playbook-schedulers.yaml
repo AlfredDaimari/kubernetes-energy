@@ -76,5 +76,41 @@
         chdir: "/home/{{inventory_hostname}}/descheduler"
 
 # setup poseidon scheduler
+- name: Run poseidon firmament scheduler
+  hosts: kube_controller
+  tags: run_poseidon
+
+  tasks:
+    - name: Run poseidon scheduler firmament deployment
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.shell: kubectl create -f https://raw.githubusercontent.com/kubernetes-sigs/poseidon/master/deploy/firmament-deployment.yaml
+
+    - name: Run poseidon scheduler deployment
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.shell: kubectl create -f https://raw.githubusercontent.com/kubernetes-sigs/poseidon/master/deploy/poseidon-deployment.yaml
+
+# remove poseidon scheduler
+- name: Remove poseidon firmament scheduler
+  hosts: kube_controller
+  tags: remove_poseidon
+
+  tasks:
+    - name: Remove poseidon scheduler firmament deployment
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.shell: kubectl delete -f https://raw.githubusercontent.com/kubernetes-sigs/poseidon/master/deploy/firmament-deployment.yaml
+
+    - name: Remove poseidon scheduler deployment
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.shell: kubectl create -f https://raw.githubusercontent.com/kubernetes-sigs/poseidon/master/deploy/poseidon-deployment.yaml
+
+
 
 
