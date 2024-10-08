@@ -2,7 +2,7 @@ import subprocess
 import sys
 
 # environment variables
-duration = 0
+duration = sys.argv[6]
 req_per_sec = sys.argv[5]
 
 ansible_hostname = sys.argv[1]
@@ -14,7 +14,7 @@ inventory_file = f'{energy_ansible_path}inventory.yaml'
 
 def setup_workload():
     # setup benchmark log files
-    setup_command = ["ansible-playbook", "-i", f"{energy_ansible_path}inventory.yaml", "-t", "setup_scaph", "e", f"scheduler={scheduler} algo={algo} req_per_sec={req_per_sec} dur={duration}", f"{energy_ansible_path}playbook-scaph.yaml"]
+    setup_command = ["ansible-playbook", "-i", f"{energy_ansible_path}inventory.yaml", "-t", "setup_scaph", "-e", f"scheduler={scheduler} algo={algo} req_per_sec={req_per_sec} dur={duration}", f"{energy_ansible_path}playbook-scaph.yaml"]
     rs = subprocess.run(setup_command, capture_output=True)
     print(rs.stdout)
     print(f"benchmark log files have been setup for {algo}")
