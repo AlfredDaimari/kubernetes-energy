@@ -211,3 +211,14 @@
         enabled: no
         state: stopped
 
+- name: Remount scaphandre directory
+  hosts: servers
+  tags: remount_scaph_virt
+  
+  tasks: 
+    - name: remount scaph directory
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.command: 'mount -t virtiofs {{inventory_hostname}}-scaph /var/scaphandre'
+
