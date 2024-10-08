@@ -75,7 +75,7 @@
 # install the requirments needed to setup a virtual file system
 - name: Setup nfs server 
   hosts: servers
-  tags: nfs setup
+  tags: nfs_setup
     
   tasks:
     #- name: Install 9p virtio driver
