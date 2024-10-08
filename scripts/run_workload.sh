@@ -10,4 +10,4 @@ duration=10m
 
 python3 setup_remove_workload.py adaim setup $algo $scheduler $req_per_sec $duration
 wrk -D exp -t 10 -c 10 -d $duration -L -s "${kubernetes_dir}${kubernetes_work_dir}" "http://${node_ip}:5000" -R $req_per_sec
-python3 setup_remove_workload.py adaim remove $algo $scheduler $rq_per_sec $duration
+python3 setup_remove_workload.py adaim remove $algo $scheduler $req_per_sec $duration
