@@ -3,7 +3,7 @@ import sys
 
 # environment variables
 duration = 0
-req_per_sec = 50
+req_per_sec = sys.argv[5]
 
 ansible_hostname = sys.argv[1]
 command_type = sys.argv[2]
