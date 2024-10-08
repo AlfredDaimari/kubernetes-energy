@@ -173,6 +173,7 @@
   # algo
   # requests per second
   # duration
+  # threads
 
   # add max top consumers to limit the json file
   tasks:
@@ -181,7 +182,7 @@
       become: yes
       become_user: root
       become_method: sudo
-      ansible.builtin.command: 'touch /var/json/{{inventory_hostname}}-{{scheduler}}-{{algo}}-{{req_per_sec}}reqs-{{dur}}dur-report.json'
+      ansible.builtin.command: 'touch /var/json/{{inventory_hostname}}-{{scheduler}}-{{algo}}-{{req_per_sec}}reqs-{{dur}}dur-{{thread}}tr-report.json'
 
     - name: Create scaphandre service for json logs every 5 seconds
       become: yes
@@ -195,7 +196,7 @@
           After=network.target
 
           [Service]
-          ExecStart=/home/{{inventory_hostname}}/scaphandre/target/debug/scaphandre --vm json -s 5 --max-top-consumers 20 --file /var/json/{{inventory_hostname}}-{{scheduler}}-{{algo}}-{{req_per_sec}}reqs-{{dur}}dur-report.json --resources
+          ExecStart=/home/{{inventory_hostname}}/scaphandre/target/debug/scaphandre --vm json -s 5 --max-top-consumers 20 --file /var/json/{{inventory_hostname}}-{{scheduler}}-{{algo}}-{{req_per_sec}}reqs-{{dur}}dur-{{thread}}tr-report.json --resources
           Restart=on-failure
 
           [Install]
