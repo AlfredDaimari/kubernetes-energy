@@ -73,9 +73,9 @@
       chdir: "/home/{{inventory_hostname}}/scaphandre"
 
 # install the requirments needed to setup a virtual file system
-- name: Setup virtiofs 
+- name: Setup nfs server 
   hosts: servers
-  tags: setup_virtio
+  tags: nfs setup
     
   tasks:
     #- name: Install 9p virtio driver
@@ -121,23 +121,41 @@
     #reboot:
     #  reboot_timeout: 600
 
-  - name: Make scaphandre mount directory
+  - name: Install nfs server
     become: yes
     become_user: root
     become_method: sudo
-    ansible.builtin.command: mkdir /var/scaphandre
+    ansible.builtin.apt:
+      name: nfs-common
+      state: latest
 
-  - name: Make scaphandre json output mount directory
+  - name: Make or ensure scaphandre mount directory
     become: yes
     become_user: root
     become_method: sudo
-    ansible.builtin.command: mkdir /var/json
+    ansible.builtin.file: 
+      path: /var/scaphandre
+      state: directory
 
-  - name: Mount the scaphandre directory
+  - name: Make or ensure scaphandre json output mount directory
     become: yes
     become_user: root
     become_method: sudo
-    ansible.builtin.command: 'mount -t virtiofs {{inventory_hostname}}-scaph /var/scaphandre'
+    ansible.builtin.file:
+      path: /var/json
+      state: directory
+
+  - name: Mount the nfs server
+    become: yes
+    become_user: root
+    become_method: sudo
+    ansible.builtin.command: "sudo mount -o actimeo=0 192.168.1.103:/var/lib/libvirt/scaphandre/{{inventory_hostname}} /var/scaphandre"
+
+    #- name: Mount the scaphandre directory
+    #become: yes
+    #become_user: root
+    #become_method: sudo
+    #ansible.builtin.command: 'mount -t virtiofs {{inventory_hostname}}-scaph /var/scaphandre'
 
     #  - name: Mount the json output directory
     #become: yes
@@ -210,15 +228,3 @@
         name: scaphandre
         enabled: no
         state: stopped
-
-- name: Remount scaphandre directory
-  hosts: servers
-  tags: remount_scaph_virt
-  
-  tasks: 
-    - name: remount scaph directory
-      become: yes
-      become_user: root
-      become_method: sudo
-      ansible.builtin.command: 'mount -t virtiofs {{inventory_hostname}}-scaph /var/scaphandre'
-
