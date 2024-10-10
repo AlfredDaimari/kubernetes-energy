@@ -69,7 +69,7 @@
 # switch branch
 - name: Switch deathstar branch
   hosts: kube_controller
-  tags: switch_branch
+  tags: switch_death_branch
   
   tasks:
     - name: switch deathstar branch

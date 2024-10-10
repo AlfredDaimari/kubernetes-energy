@@ -9,11 +9,24 @@
       become_user: root
       become_method: sudo
       ansible.builtin.git:
-        repo: https://github.com/kubernetes-sigs/descheduler.git
+        repo: https://github.com/AlfredDaimari/descheduler.git      
         dest: "/home/{{inventory_hostname}}/descheduler"
 
     - name: Add as safe directory
       ansible.builtin.command: "git config --global --add safe.directory /home/{{inventory_hostname}}/descheduler"
+
+# switch descheduler branch
+- name: Switch descheduler branch
+  hosts: kube_controller
+  tags: switch_des_branch
+
+  tasks:
+    - name: Switch descheduler branch
+      ansible.builtin.git:
+        repo: https://github.com/AlfredDaimari/descheduler.git
+        dest: "/home/{{inventory_hostname}}/descheduler"
+        version: "{{branch_name}}"
+        force: yes
 
 # setup kubernetes descheduler
 - name: Run descheduler
