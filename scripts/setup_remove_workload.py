@@ -19,19 +19,19 @@ def setup_workload():
     # setup benchmark log files
     setup_command = ["ansible-playbook", "-i", f"{energy_ansible_path}inventory.yaml", "-t", "setup_scaph", "-e", f"scheduler={scheduler} algo={algo} req_per_sec={req_per_sec} dur={duration} thread={thread} setting={setting}", f"{energy_ansible_path}playbook-scaph.yaml"]
     rs = subprocess.run(setup_command, capture_output=True)
-    print(rs.stdout)
+    print(rs.stdout.decode('utf-8'))
     print(f"benchmark log files have been setup for {algo}")
     
     # enable scaphandre service
     enable_command = ["ansible-playbook", "-i", f"{energy_ansible_path}inventory.yaml", "-t", "enable_scaph", f"{energy_ansible_path}playbook-scaph.yaml"]
     rs = subprocess.run(enable_command, capture_output=True)
-    print(rs.stdout)
+    print(rs.stdout.decode('utf-8'))
     print(f"scaphandre service for {algo} has been setup across all nodes")
 
 def remove_workload():
     disable_command = ["ansible-playbook", "-i", f"{energy_ansible_path}inventory.yaml", "-t", "disable_scaph", f"{energy_ansible_path}playbook-scaph.yaml"]
     rs = subprocess.run(disable_command, capture_output=True)
-    print(rs.stdout)
+    print(rs.stdout.decode('utf-8'))
     print(f"scaphandre service for {algo} has been disabled across all nodes")
 
 def main():
