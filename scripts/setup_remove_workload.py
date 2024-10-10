@@ -10,13 +10,14 @@ scheduler = sys.argv[4]
 duration = sys.argv[6]
 req_per_sec = sys.argv[5]
 thread=sys.argv[7]
+setting=sys.argv[8]
 
 energy_ansible_path = f'/home/{ansible_hostname}/kubernetes-energy/ansible/'
 inventory_file = f'{energy_ansible_path}inventory.yaml' 
 
 def setup_workload():
     # setup benchmark log files
-    setup_command = ["ansible-playbook", "-i", f"{energy_ansible_path}inventory.yaml", "-t", "setup_scaph", "-e", f"scheduler={scheduler} algo={algo} req_per_sec={req_per_sec} dur={duration} thread={thread}", f"{energy_ansible_path}playbook-scaph.yaml"]
+    setup_command = ["ansible-playbook", "-i", f"{energy_ansible_path}inventory.yaml", "-t", "setup_scaph", "-e", f"scheduler={scheduler} algo={algo} req_per_sec={req_per_sec} dur={duration} thread={thread} setting={setting}", f"{energy_ansible_path}playbook-scaph.yaml"]
     rs = subprocess.run(setup_command, capture_output=True)
     print(rs.stdout)
     print(f"benchmark log files have been setup for {algo}")
