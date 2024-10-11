@@ -85,6 +85,18 @@
       args:
         chdir: "/home/{{inventory_hostname}}/descheduler"
 
+# setup metrics server
+- name: Setup kubernetes metrics server
+  hosts: kube_controller
+  tags: setup_metrics_server
+
+  tasks:
+    - name: setup metrics server for scheduler usage
+      become: yes
+      become_user: root
+      become_method: sudo
+      ansible.builtin.shell: kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
 # setup poseidon scheduler
 - name: Run poseidon firmament scheduler
   hosts: kube_controller
