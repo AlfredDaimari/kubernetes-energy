@@ -12,6 +12,17 @@
     - name: Add as safe directory
       ansible.builtin.command: "git config --global --add safe.directory /home/{{inventory_hostname}}/descheduler"
 
+# Setup poseidon firmament scheduler
+- name: Setup poseidon firmament
+  hosts: kube_controller
+  tags: setup_poseidon
+
+  tasks:
+    - name: Clone poseidon
+      ansible.builtin.git:
+        repo: https://github.com/kubernetes-retired/poseidon.git
+        dest: "/home/{{inventory_hostname}}/poseidon"
+
 # switch descheduler branch
 - name: Switch descheduler branch
   hosts: kube_controller
@@ -107,13 +118,17 @@
       become: yes
       become_user: root
       become_method: sudo
-      ansible.builtin.shell: kubectl create -f https://raw.githubusercontent.com/kubernetes-sigs/poseidon/master/deploy/firmament-deployment.yaml
+      ansible.builtin.shell: kubectl create -f deploy/firmament-deployment.yaml
+      args:
+        chdir: "/home/{{inventory_hostname}}/poseidon"
 
     - name: Run poseidon scheduler deployment
       become: yes
       become_user: root
       become_method: sudo
-      ansible.builtin.shell: kubectl create -f https://raw.githubusercontent.com/kubernetes-sigs/poseidon/master/deploy/poseidon-deployment.yaml
+      ansible.builtin.shell: kubectl create -f deploy/poseidon-deployment.yaml
+      args:
+        chdir: "/home/{{inventory_hostname}}/poseidon"
 
 # remove poseidon scheduler
 - name: Remove poseidon firmament scheduler
