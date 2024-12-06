@@ -14,9 +14,9 @@ Certain changes had to be made to the original benchmark and scheduler repos, ou
 - Descheduler
 - Poseidon
 
-### Installation
+## Installation
 
-#### Setup continuum cluster
+### Setup continuum cluster
 **Step 1:** Install continuum framework, click [here](https://github.com/atlarge-research/continuum) for instructions on setting up and installing continnum framework
 
 **Step 2:** Basic settings for a 3 server cluster (the ones used for our benchmarks)
@@ -32,12 +32,12 @@ continuum.py basic.cfg
 ```
 **Step 4:** Remember to store the ssh keys, machine name for each vm in the cluster
 
-#### Setup scaphandre
+### Setup scaphandre
 **Step 1:** Install scaphandre on the host, click [here](https://hubblo-org.github.io/scaphandre-documentation/tutorials/compilation-linux.html) for linux compilation. **Remember to install qemu feature with cargo**
 
 **Step 2:** Create scaphandre service on host using the qemu option, click [here](https://hubblo-org.github.io/scaphandre-documentation/how-to_guides/propagate-metrics-hypervisor-to-vm_qemu-kvm.html) for steps for setting up scaphandre on vms. If this does not work, follow the NFS guide below 
 
-#### Setup Scaphandre with NFS
+### Setup Scaphandre with NFS
 **Step 1:** Run scaphandre on host/hypervisor machine (Ideally convert this into a service, such that it restarts on failure).
 ```
 scaphandre qemu
@@ -46,7 +46,7 @@ scaphandre qemu
 ```
 ```
 
-#### Setup workload generator
+### Setup workload generator
 A binary to run workload defined in lua files needs to be built. Follow the steps below to build the binary.
 ```
 # change working directory to deathStarBench (our modified repo)
@@ -55,7 +55,7 @@ cd DeathStarBench
 # run build command
 ```
 
-#### Install prequisites in cluster
+### Install prequisites in cluster
 For the benchmarks to run, prerequisites need to be installed in the cluster. 
 ```
 # clone this repository
