@@ -10,9 +10,9 @@ This repository provides the code, data, and instructions required to produce th
 
 ### Modified Benchmark Repos
 Certain changes had to be made to the original benchmark and scheduler repos, our modified benchmark and scheduler repos are given below:
-- DeathStarBench
-- Descheduler
-- Poseidon
+- [DeathStarBench](https://github.com/AlfredDaimari/DeathStarBench.git)
+- [Descheduler](https://github.com/AlfredDaimari/descheduler)
+- [Poseidon](https://github.com/AlfredDaimari/poseidon)
 
 ## Installation
 
@@ -115,22 +115,96 @@ ansible-playbook -i inventory.yaml -t remove_poseidon playbook-schedulers.yaml
 ### Running hotel reservation benchmark
 ```
 # setup hotel reservation
+ansible-playbook -i inventory.yaml -t setup_docker playbook-benchmark.yaml
+ansible-playbook -i inventory.yaml -t build_image_hotel playbook-benchmark.yaml
 
-# setup hotel reservation branch
+# setup hotel reservation branch (do not switch for default)
+ansible-playbook -i inventory.yaml -t switch_death_branch -e "branch_name=descheduler" playbook-benchmark.yaml
 
 # run hotel reservation
+ansible-playbook -i inventory.yaml -t setup_hotel_reservation playbook-benchmark.yaml
 
 # set up hotel reservation script parameters
+cd ../scripts
+
+# example of set parameters in run_workload.sh file
+scheduler="descheduler"
+algo="hotelReservation"
+req_per_sec="100"
+node_ip="192.168.138.2" # ip of any node in the cluster
+kubernetes_dir="~/DeathStarBench/hotelReservation"
+kubernetes_work_dir="/wrk2/scripts/hotel-reservation/mixed-workload_type_1.lua"
+duration=10m
+setting="lowNodeUtilization" # setting is set only for descheduler, rest is default
+thread=10
 
 # run hotel reservation workload
+sh ./run_workload.sh
+```
+
+### Remove hotel reservation benchmark
+```
+# remove pods
+ansible-playbook -i inventory.yaml -t remove_hotel_reservation playbook-benchmark.yaml
+
+# delete images
+ansible-playbook -i inventory.yaml -t delete_image playbook-benchmark.yaml
 ```
 
 ### Running media microservices benchmark
 ```
+# setup media microservices
+ansible-playbook -i inventory.yaml -t setup_docker playbook-benchmark.yaml
+ansible-playbook -i inventory.yaml -t build_image_media playbook-benchmark.yaml
+
+# setup media microservices branch
+ansible-playbook -i inventory.yaml -t switch_death_branch -e "branch_name=poseidon" playbook-benchmark.yaml
+
+# run media microservices
+ansible-playbook -i inventory.yaml -t setup_media_microservices playbook-benchmark.yaml
+
+# set up media microservices script parameters
+cd ../scripts
+
+# example of set parameters in run_workload.sh file
+scheduler="poseidon"
+algo="mediaMicroservices"
+req_per_sec="100"
+node_ip="192.168.138.2" # ip of any node in the cluster
+kubernetes_dir="~/DeathStarBench/mediaMicroservices"
+kubernetes_work_dir="/wrk2/scripts/media-microservices/compose-review.lua"
+duration=10m
+setting="default" # setting is set only for descheduler, rest is default
+thread=10
+
+# setup media microservices http route in wrk2 command in the script
+# http://localhost:8080/wrk2-api/review/compose
+
+# generate users and movies info
+cd ~/DeathStarBench/mediaMicroservices/scripts
+python3 write_movie_info.py --server_address 102.168.138.2:8080 && register_users.sh && register_movies.sh
+
+# run media microservices workload
+sh ./run_workload.sh
+```
+
+### Remove media microservices benchmark
+```
+# remove pods
+ansible-playbook -i inventory.yaml -t remove_media_microservices playbook-benchmark.yaml
+
+# delete images
+ansible-playbook -i inventory.yaml -t delete_image playbook-benchmark.yaml
 ```
 
 ### Running social network benchmark
 ```
+```
+
+### Remove social network benchmark
+```
+# remove pods
+ansible-playbook -i inventory.yaml -t remove_social_network playbook-benchmark.yaml 
 ```
 
 
