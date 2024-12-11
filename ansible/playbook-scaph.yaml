@@ -197,7 +197,7 @@
           After=network.target
 
           [Service]
-          ExecStart=/home/{{inventory_hostname}}/scaphandre/target/debug/scaphandre --vm json -t -1 -s 0 -n 500000000 --max-top-consumers 20 --file /var/json/{{inventory_hostname}}-{{scheduler}}-{{algo}}-{{req_per_sec}}reqs-{{dur}}dur-{{thread}}tr-{{setting}}st-report.json --resources
+          ExecStart=/home/{{inventory_hostname}}/scaphandre/target/debug/scaphandre --vm json -s 0 -n 500000000 --max-top-consumers 20 --file /var/json/{{inventory_hostname}}-{{scheduler}}-{{algo}}-{{req_per_sec}}reqs-{{dur}}dur-{{thread}}tr-{{setting}}st-report.json --resources
           Restart=on-failure
 
           [Install]
