@@ -5,7 +5,7 @@ This repository provides the code, data, and instructions required to produce th
 ## Quick Start
 ### Prerequisites
 - continuum framework: This is used to setup the VM cluster. Link: [continuum](https://github.com/atlarge-research/continuum)
-- scaphandre: This is used for energy consumption tracking in the cluster. Link [scaphandre](https://github.com/hubblo-org/scaphandre)
+- scaphandre: This is used for energy consumption tracking in the cluster. Link: [scaphandre](https://github.com/hubblo-org/scaphandre)
 - ansible: Used to setup and run workloads. Link: [ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
 
 ### Modified Benchmark Repos
@@ -22,7 +22,21 @@ Certain changes had to be made to the original benchmark and scheduler repos, ou
 **Step 2:** Basic settings for a 3 server cluster (the ones used for our benchmarks)
 ```
 cat > basic.cfg <<EOF
+[infrastructure]
+provider = qemu
 
+cloud_nodes = 3
+cloud_cores = 4
+cloud_memory = 16
+cloud_quota = 1.0
+
+middleIP = 138
+middleIP_base = 139
+base_path = /mnt/sdc/store
+
+[benchmark]
+resource_manager = kubernetes
+resource_manager_only = True
 EOF
 ```
 **Step 3:** Use continuum to setup vm cluster
@@ -30,7 +44,7 @@ EOF
 # continnum cluster setup (in the continuum directory)
 continuum.py basic.cfg
 ```
-**Step 4:** Remember to store the ssh keys, machine name for each vm in the cluster
+**Step 4:** Remember to store the ssh keys, machine name for each vm in the cluster in a file
 
 ### Setup scaphandre
 **Step 1:** Install scaphandre on the host, click [here](https://hubblo-org.github.io/scaphandre-documentation/tutorials/compilation-linux.html) for linux compilation. **Remember to install qemu feature with cargo**
@@ -44,7 +58,12 @@ scaphandre qemu
 ```
 **Step 2:** Expose scaphandre vm metrics using NFS
 ```
+# add the following lines to your /etc/exports file 
+/var/lib/libvirt/scaphandre/cloud0_user*(ro,sync,no_subtree_check,fsid=0)
+/var/lib/libvirt/scaphandre/cloud1_user *(ro,sync,no_subtree_check,fsid=2)
+/var/lib/libvirt/scaphandre/cloud_controller_user *(ro,sync,no_subtree_check,fsid=1)
 ```
+After adding the above lines, restart the NFS Server. **Note: the user is your linux username, the libvirt scaphandre directory should have the name of the vms**
 
 ### Setup workload generator
 A binary to run workload defined in lua files needs to be built. Follow the steps below to build the binary.
@@ -134,12 +153,15 @@ req_per_sec="100"
 node_ip="192.168.138.2" # ip of any node in the cluster
 kubernetes_dir="~/DeathStarBench/hotelReservation"
 kubernetes_work_dir="/wrk2/scripts/hotel-reservation/mixed-workload_type_1.lua"
-duration=10m
+duration=20m
 setting="lowNodeUtilization" # setting is set only for descheduler, rest is default
-thread=10
+thread=50
+
+# setup http route in wrk command in the script
+# http://${node_ip}:32767/wrk2-api/review/compose
 
 # run hotel reservation workload
-sh ./run_workload.sh
+sh run_workload.sh
 ```
 
 ### Remove hotel reservation benchmark
@@ -185,7 +207,7 @@ cd ~/DeathStarBench/mediaMicroservices/scripts
 python3 write_movie_info.py --server_address 102.168.138.2:8080 && register_users.sh && register_movies.sh
 
 # run media microservices workload
-sh ./run_workload.sh
+sh run_workload.sh
 ```
 
 ### Remove media microservices benchmark
