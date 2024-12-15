@@ -148,7 +148,7 @@
       become: yes
       become_user: root
       become_method: sudo
-      ansible.builtin.shell: kubectl create -f deploy/poseidon-deployment.yaml
+      ansible.builtin.shell: kubectl delete -f deploy/poseidon-deployment.yaml
       args:
         chdir: "/home/{{inventory_hostname}}/poseidon"
 
