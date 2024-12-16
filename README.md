@@ -85,7 +85,7 @@ git clone https://github.com/AlfredDaimari/kubernetes-energy
 # continuum should log out your cluster detials, it can also be found on continuum logs
 
 # install scaph on each vm
-cd ansible
+cd kubernetes-energy/ansible
 ansible-playbook -i inventory.yaml -t install_scaph playbook-scaph.yaml
 
 # setup nfs server
@@ -117,6 +117,7 @@ ansible-playbook -i inventory.yaml -t remove_descheduler playbook-schedulers.yam
 ```
 
 ### Setup Poseidon Scheduler
+Due to its scheduling mechanics, the poseidon scheduler sometimes cannot deploy all pods, for these deployments, edit manifest file after deployment by commenting out schedulerName
 ```
 # setup poseidon
 ansible-playbook -i inventory.yaml -t setup_poseidon playbook-schedulers.yaml
@@ -158,7 +159,7 @@ setting="lowNodeUtilization" # setting is set only for descheduler, rest is defa
 thread=50
 
 # setup http route in wrk command in the script
-# http://${node_ip}:32767/wrk2-api/review/compose
+# http://${node_ip}:32767
 
 # run hotel reservation workload
 sh run_workload.sh
@@ -185,26 +186,28 @@ ansible-playbook -i inventory.yaml -t switch_death_branch -e "branch_name=poseid
 # run media microservices
 ansible-playbook -i inventory.yaml -t setup_media_microservices playbook-benchmark.yaml
 
+# generate users and movies info
+# in the files, remember to add the correct ip of one vm in your cluster
+# nginx service is running on node port 32765
+cd ~/DeathStarBench/mediaMicroservices/scripts
+python3 write_movie_info.py && register_users.sh && register_movies.sh
+
 # set up media microservices script parameters
-cd ../scripts
+cd ~/kubernetes-energy/scripts
 
 # example of set parameters in run_workload.sh file
 scheduler="poseidon"
 algo="mediaMicroservices"
-req_per_sec="100"
+req_per_sec="1000"
 node_ip="192.168.138.2" # ip of any node in the cluster
 kubernetes_dir="~/DeathStarBench/mediaMicroservices"
 kubernetes_work_dir="/wrk2/scripts/media-microservices/compose-review.lua"
-duration=10m
+duration=20m
 setting="default" # setting is set only for descheduler, rest is default
-thread=10
+thread=50
 
 # setup media microservices http route in wrk2 command in the script
-# http://localhost:8080/wrk2-api/review/compose
-
-# generate users and movies info
-cd ~/DeathStarBench/mediaMicroservices/scripts
-python3 write_movie_info.py --server_address 102.168.138.2:8080 && register_users.sh && register_movies.sh
+# http://${node_ip}:32765/wrk2-api/review/compose
 
 # run media microservices workload
 sh run_workload.sh
@@ -221,6 +224,35 @@ ansible-playbook -i inventory.yaml -t delete_image playbook-benchmark.yaml
 
 ### Running social network benchmark
 ```
+# setup social network branch
+ansible-playbook -i inventory.yaml -t switch_death_branch -e "branch_name=poseidon" playbook-benchmark.yaml
+
+# run social network
+ansible-playbook -i inventory.yaml -t setup_social_network playbook-benchmark.yaml
+
+# generate social media graphs
+cd ~/DeathStarBench/socialNetwork
+python3 scripts/init_social_graph.py --graph=socfb-Reed98 --ip=192.168.138.2 --port=32763
+
+# setup social network script parameters
+cd ~/kubernetes-energy/scripts
+
+# example of set parameters in run_workload.sh file
+scheduler="default"
+algo="socialNetwork"
+req_per_sec="1000"
+node_ip="192.168.138.2" # ip of any node in the cluster
+kubernetes_dir="~/DeathStarBench/socialNetwork"
+kubernetes_work_dir="/wrk2/scripts/social-network/mixed-workload.lua"
+duration=20m
+setting="default" # setting is set only for descheduler, rest is default
+thread=50
+
+# setup social network http route in wrk2 command in the script
+# http://${node_ip}:32763
+
+# run social network worload
+sh run_workload.sh
 ```
 
 ### Remove social network benchmark
