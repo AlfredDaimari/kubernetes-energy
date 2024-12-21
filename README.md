@@ -7,7 +7,7 @@ This repository provides the code, data, and instructions required to produce th
 - continuum framework: This is used to setup the VM cluster. Link: [continuum](https://github.com/atlarge-research/continuum)
 - scaphandre: This is used for energy consumption tracking in the cluster. Link: [scaphandre](https://github.com/hubblo-org/scaphandre)
 - ansible: Used to setup and run workloads. Link: [ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
-- docker: Used to build workload generator binary Link: [docker](https://docs.docker.com/desktop/setup/install/linux/ubuntu/)
+- docker: Used to build workload generator binary. Link: [docker](https://docs.docker.com/desktop/setup/install/linux/ubuntu/)
 
 ### Modified Benchmark Repos
 Certain changes had to be made to the original benchmark and scheduler repos, our modified benchmark and scheduler repos are given below:
@@ -71,9 +71,9 @@ A binary to run workload defined in lua files needs to be built. Follow the step
 ```
 # change working directory to deathStarBench (our modified repo)
 cd DeathStarBench/wrk2
-docker build .
 
 # run build command
+docker build .
 ```
 
 ### Install prequisites in cluster
@@ -263,7 +263,9 @@ sh run_workload.sh
 ansible-playbook -i inventory.yaml -t remove_social_network playbook-benchmark.yaml 
 ```
 
-### Copying Data
+## Working with Data
 The data for the benchmarks are stored in the /var/json directory within each vm.
+Some data from our experiments is data/data1 and data/data2.
+Data can be visualised using the notebooks/energy.ipynb notebook present in the repo.
 
 
