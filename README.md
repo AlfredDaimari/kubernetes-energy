@@ -7,6 +7,7 @@ This repository provides the code, data, and instructions required to produce th
 - continuum framework: This is used to setup the VM cluster. Link: [continuum](https://github.com/atlarge-research/continuum)
 - scaphandre: This is used for energy consumption tracking in the cluster. Link: [scaphandre](https://github.com/hubblo-org/scaphandre)
 - ansible: Used to setup and run workloads. Link: [ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
+- docker: Used to build workload generator binary Link: [docker](https://docs.docker.com/desktop/setup/install/linux/ubuntu/)
 
 ### Modified Benchmark Repos
 Certain changes had to be made to the original benchmark and scheduler repos, our modified benchmark and scheduler repos are given below:
@@ -69,7 +70,8 @@ After adding the above lines, restart the NFS Server. **Note: the user is your l
 A binary to run workload defined in lua files needs to be built. Follow the steps below to build the binary.
 ```
 # change working directory to deathStarBench (our modified repo)
-cd DeathStarBench
+cd DeathStarBench/wrk2
+docker build .
 
 # run build command
 ```
@@ -260,5 +262,8 @@ sh run_workload.sh
 # remove pods
 ansible-playbook -i inventory.yaml -t remove_social_network playbook-benchmark.yaml 
 ```
+
+### Copying Data
+The data for the benchmarks are stored in the /var/json directory within each vm.
 
 
